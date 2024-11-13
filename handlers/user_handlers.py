@@ -1,16 +1,19 @@
-from aiogram import types, Dispatcher
-from aiogram.dispatcher.filters import Text
-from services.booking import start_booking, confirm_booking
+from aiogram import Router, types, Bot
+from aiogram.filters import Command, Text
 from keyboards.user_keyboards import get_service_menu
 
-# Приветствие пользователя
+router = Router()
+
+# Обработчик команды /start
+@router.message(Command("start"))
 async def start_command(message: types.Message):
     await message.answer("Добро пожаловать в наш салон красоты!", reply_markup=get_service_menu())
 
-# Начало процесса бронирования
+# Обработчик для записи на услугу
+@router.message(Text("Записаться"))
 async def handle_booking(message: types.Message):
-    await start_booking(message)
+    await message.answer("Какую услугу вы хотите выбрать?")
 
-def register_handlers(dp: Dispatcher):
-    dp.register_message_handler(start_command, commands=['start'])
-    dp.register_message_handler(handle_booking, Text(equals='Записаться'))
+# Функция для регистрации обработчиков
+def register_handlers(dp, bot: Bot):
+    dp.include_router(router)

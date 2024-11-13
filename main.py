@@ -1,21 +1,25 @@
-from aiogram import Bot, Dispatcher, executor
+import asyncio
+from aiogram import Bot, Dispatcher
 from config import TOKEN
 from database import init_db
 from handlers import user_handlers, admin_handlers
 
-
-# Инициализация бота и диспетчера
+# Инициализация бота
 bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
+dp = Dispatcher()
 
-# Инициализация базы данных
-init_db()
+# Функция для инициализации всех обработчиков и запуска бота
+async def main():
+    # Инициализация базы данных
+    init_db()
 
-# Регистрация всех хендлеров
-user_handlers.register_handlers(dp)
-admin_handlers.register_handlers(dp)
+    # Регистрация обработчиков
+    user_handlers.register_handlers(dp, bot)
+    admin_handlers.register_handlers(dp, bot)
 
-# Запуск бота
+    # Запуск поллинга
+    await dp.start_polling(bot)
+
 if __name__ == "__main__":
-    print("Бот успешно запущен!")
-    executor.start_polling(dp, skip_updates=True)
+    print("Бот запущен...")
+    asyncio.run(main())

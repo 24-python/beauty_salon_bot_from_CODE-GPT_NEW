@@ -1,7 +1,7 @@
 import os
 
 # Telegram Bot Token
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TOKEN = os.getenv("8095038946:AAF-j8fR2g1f_zkVlshE4eYvqIkgOFQUN10")
 
 # Список ID администраторов
 ADMIN_IDS = [123456789, 987654321]
